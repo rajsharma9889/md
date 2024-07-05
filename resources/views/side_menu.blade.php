@@ -14,6 +14,13 @@
             <div class="menu-title">Category</div>
         </a>
     </li>
+    <li>
+        <a href="{{ route('admin.karigar') }}">
+            <div class="parent-icon"><i class='bx bxs-user-plus'></i>
+            </div>
+            <div class="menu-title">Karigar</div>
+        </a>
+    </li>
 
 
 

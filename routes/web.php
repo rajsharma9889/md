@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FormFieldsController;
+use App\Http\Controllers\KarigarController;
 use App\Http\Controllers\OtherDetailsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +36,8 @@ Route::middleware('admin')->group(function () {
         Route::any('/add_category/{id?}', [CategoryController::class, 'add_category_page'])->name('add_category');
 
 
-
+        // Kaigar controller
+        Route::any('/karigar/{status?}/{id?}', [KarigarController::class, 'karigarIndex'])->name('admin.karigar');
 
 
         // Other Details
