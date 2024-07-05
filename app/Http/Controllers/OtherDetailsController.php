@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutUs;
+use App\Models\HomeBanner;
+use App\Models\PrivecyPolicy;
 use App\Models\TermAndCondition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -65,6 +67,55 @@ class OtherDetailsController extends Controller
         $page_data['page_title'] = 'About US';
         $page_data['get_table'] = AboutUs::all();
         return view('about_us', compact('page_data'));
+
+    }
+    public function privacyIndex(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $validator = Validator::make($request->all(), [
+                'description' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->with('error', $validator->errors()->first());
+            }
+            $privecyPolicyId = $request->input('submit');
+            if ($privecyPolicyId) {
+
+                $privecyPolicyId = PrivecyPolicy::find($privecyPolicyId);
+                $privecyPolicyId->description = $request->input('description');
+                $privecyPolicyId->save();
+            } else {
+                $privecyPolicyId = new PrivecyPolicy;
+                $privecyPolicyId->description = $request->input('description');
+                $privecyPolicyId->save();
+            }
+            return back()->with('success', 'Privecy Policy Updated successfully.');
+
+        }
+
+        $page_data['page_title'] = 'Privecy Policy';
+        $page_data['get_table'] = PrivecyPolicy::all();
+        return view('privacy_policy', compact('page_data'));
+
+    }
+    public function homeBannerIndex(Request $request)
+    {
+        $dataQuery = HomeBanner::query();
+
+        if ($request->has('true')) {
+            $perPage = $request->input('pageLimit', 10);
+            $searchFilter = $request->input('searchFilter');
+
+            if ($searchFilter !== "") {
+                $dataQuery->search($searchFilter);
+            }
+            $data = $dataQuery->paginate($perPage);
+
+            return response()->json($data);
+        }
+        $page_data['page_title'] = 'Home Banner';
+        return view('home_banner', compact('page_data'));
 
     }
 }

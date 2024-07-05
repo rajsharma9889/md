@@ -7,49 +7,85 @@
             <div class="menu-title">Dashboard</div>
         </a>
     </li>
-    <li id="">
-        {{-- <a href="{{ route('category') }}"> --}}
-        <div class="parent-icon"><i class='bx bxs-category'></i>
-        </div>
-        <div class="menu-title">Category</div>
+    <li>
+        <a href="{{ route('admin.category') }}">
+            <div class="parent-icon"><i class='bx bxs-category'></i>
+            </div>
+            <div class="menu-title">Category</div>
         </a>
     </li>
-    <li id="">
-        {{-- <a href="{{ route('subcategory') }}"> --}}
-        <div class="parent-icon"><i class='bx bx-category-alt'></i>
-        </div>
-        <div class="menu-title">Sub Category</div>
-        </a>
-    </li>
-    <li id="">
-        {{-- <a href="{{ route('subject') }}"> --}}
-        <div class="parent-icon"><i class='bx bxs-book-add'></i>
-        </div>
-        <div class="menu-title">Subject</div>
-        </a>
-    </li>
-    {{-- 
-    @foreach ($sub_cat as $item)
+
+
+
+
+
 
     <li>
         <a href="javascript:;" class="has-arrow">
-            <div class="parent-icon"><i class='bx bx-book-reader'></i>
+            <div class="parent-icon"> <i class='bx bxs-customize'></i>
             </div>
-            <div class="menu-title">{{$item->sub_category_name}}</div>
+
+
+            <div class="menu-title">Form Fields</div>
         </a>
         <ul>
-            @foreach ($item->subject as $subject)
-            <li> <a href="{{route('test',$subject->id)}}"><i class='bx bx-radio-circle'></i>{{$subject->subject_name}}</a>
+            <li>
+                <a href="{{ route('admin.gender') }}">
+                    <i class='bx bx-stats'></i>
+                    Gender
+                </a>
             </li>
-            @endforeach
+            <li>
+                <a href="{{ route('admin.purity') }}">
+                    <i class='bx bx-stats'></i>
+                    Purity
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.color') }}">
+                    <i class='bx bx-stats'></i>
+                    Color
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.dandi') }}">
+                    <i class='bx bx-stats'></i>
+                    Dandi
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.gaze_size') }}">
+                    <i class='bx bx-stats'></i>
+                    Gaze Size
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.kunda') }}">
+                    <i class='bx bx-stats'></i>
+                    Kunda
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.latkan') }}">
+                    <i class='bx bx-stats'></i>
+                    Latkan
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.size') }}">
+                    <i class='bx bx-stats'></i>
+                    Size
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.weight') }}">
+                    <i class='bx bx-stats'></i>
+                    Weight
+                </a>
+            </li>
 
         </ul>
     </li>
-    @endforeach --}}
-
-
-
-
     <li>
         <a href="javascript:;" class="has-arrow">
             <div class="parent-icon"> <i class='bx bx-cookie'></i>
