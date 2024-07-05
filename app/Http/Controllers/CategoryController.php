@@ -60,6 +60,38 @@ class CategoryController extends Controller
             return back()->with('success', 'Category added successfully.');
 
         }
+        if ($request->isMethod('PUT')) {
+
+            // dd($request->all());
+            $validator = Validator::make($request->all(), [
+                'category' => 'required|string',
+                'gender' => 'required|in:0,1,2',
+                'purity' => 'required|in:0,1,2',
+                'color' => 'required|in:0,1,2',
+                'dandi' => 'required|in:0,1,2',
+                'kunda' => 'required|in:0,1,2',
+                'size' => 'required|in:0,1,2',
+                'gaze_size' => 'required|in:0,1,2',
+                'weight' => 'required|in:0,1,2',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->with('error', $validator->errors()->first());
+            }
+            $category = Category::find($request->id);
+            $category->category = $request->category;
+            $category->gender = $request->gender;
+            $category->purity = $request->purity;
+            $category->color = $request->color;
+            $category->dandi = $request->dandi;
+            $category->kunda = $request->kunda;
+            $category->size = $request->size;
+            $category->gaze_size = $request->gaze_size;
+            $category->weight = $request->weight;
+            $category->save();
+            return redirect()->route('admin.category')->with('success', 'Category updated successfully.');
+
+        }
 
 
         $page_data['page_title'] = 'All Category';
@@ -68,8 +100,9 @@ class CategoryController extends Controller
     public function add_category_page(Request $request, $id = null)
     {
         if ($id) {
+            $category = Category::find($id);
             $page_data['page_title'] = 'Edit category';
-            return view('category.add_category', compact('page_data'));
+            return view('category.edit_category', compact('page_data', 'category'));
         }
         $page_data['page_title'] = 'Add a category';
         return view('category.add_category', compact('page_data'));

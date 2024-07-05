@@ -26,13 +26,21 @@ Route::middleware('admin')->group(function () {
         Route::any('/size/{status?}/{id?}', [FormFieldsController::class, 'sizeIndex'])->name('admin.size');
         Route::any('/weight/{status?}/{id?}', [FormFieldsController::class, 'weightIndex'])->name('admin.weight');
 
+
+
+
+
         // Category 
         Route::any('/category/{status?}/{id?}', [CategoryController::class, 'categoryIndex'])->name('admin.category');
         Route::any('/add_category/{id?}', [CategoryController::class, 'add_category_page'])->name('add_category');
 
+
+
+
+
         // Other Details
         Route::any('/terms', [OtherDetailsController::class, 'termsIndex'])->name('admin.terms');
-        Route::any('/home_banner', [OtherDetailsController::class, 'homeBannerIndex'])->name('admin.banner');
+        Route::any('/home_banner/{stauts?}/{id?}', [OtherDetailsController::class, 'homeBannerIndex'])->name('admin.banner');
         Route::any('/about_us', [OtherDetailsController::class, 'aboutUsIndex'])->name('admin.aboutus');
         Route::any('/privacy', [OtherDetailsController::class, 'privacyIndex'])->name('admin.privacy');
     });

@@ -11,7 +11,6 @@
     $(document).ready(function() {
         $('#example').DataTable();
     });
-
 </script>
 <!--app JS-->
 <script src="{{ asset('public/assets/js/app.js') }}"></script>

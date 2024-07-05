@@ -6,7 +6,7 @@
         </div>
         <div class="col-6 text-end px-0 px-lg-3">
             <button type="button"
-                onclick="ajaxModal('{{ url('ajaxModal/modal_files.add_banner_images') }}', sendObj({'_token' : '{{ csrf_token() }}'}))"
+                onclick="ajaxModal('{{ url('ajaxModal/modal_files.add_home_banner') }}', sendObj({'_token' : '{{ csrf_token() }}'}))"
                 class="btn btn-primary btn-sm px-3"><i class='bx bx-plus'></i>Add</button>
         </div>
     </div>
@@ -20,7 +20,7 @@
                         <tr id="thead-html">
                             <th>S no.</th>
                             <th>Image</th>
-                            <th>Description </th>
+                            <th>Title </th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -29,7 +29,7 @@
                         <tr dir-paginate="item in users | filter: q | itemsPerPage: usersPerPage" total-items="totalUsers"
                             current-page="pagination.current">
                             <td>@{{ getSerialNumber($index) }}</td>
-                            <td><img style="width: 2rem" class="rounded" src="{{ asset('') }}/@{{ item.image }}"
+                            <td><img style="width: 2rem" class="rounded" src="{{ asset('') }}@{{ item.image }}"
                                     alt="" srcset=""> </td>
                             <td>@{{ item.title }}</td>
                             <td>
@@ -52,7 +52,10 @@
                                                 style="all: unset; cursor: pointer;"
                                                 ng-click="ajaxModal('{{ url('ajaxModal/modal_files.update_role') }}', sendObj({'_token' : '{{ csrf_token() }}', 'param1' : item.id}))">Edit</a>
                                         </li>
-
+                                        <li class="py-1">
+                                            <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                                href="{{ route('admin.banner') }}/delete/@{{ item.id }}">Delete</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>

@@ -7,6 +7,8 @@ use App\Models\HomeBanner;
 use App\Models\PrivecyPolicy;
 use App\Models\TermAndCondition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class OtherDetailsController extends Controller
@@ -99,10 +101,35 @@ class OtherDetailsController extends Controller
         return view('privacy_policy', compact('page_data'));
 
     }
-    public function homeBannerIndex(Request $request)
+    public function homeBannerIndex(Request $request, $status = null, $id = null)
     {
-        $dataQuery = HomeBanner::query();
+        if ($status == 'delete') {
+            $banner = HomeBanner::find($id);
+            if (File::exists($banner->image)) {
+                File::delete($banner->image);
+            }
+            $banner->delete();
+            return back()->with('success', 'Banner delete successfully.');
+        }
+        if ($request->isMethod('POST')) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string',
+                'image' => 'required'
+            ]);
 
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->with('error', $validator->errors()->first());
+            }
+            $path = $request->image->store('media', 'public');
+
+            $banner = new HomeBanner;
+            $banner->title = $request->title;
+            $banner->image = 'public/storage/' . $path;
+            $banner->save();
+            return back()->with('success', 'Home Banner added successfully.');
+        }
+
+        $dataQuery = HomeBanner::query();
         if ($request->has('true')) {
             $perPage = $request->input('pageLimit', 10);
             $searchFilter = $request->input('searchFilter');
