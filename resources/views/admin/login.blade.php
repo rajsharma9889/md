@@ -41,7 +41,7 @@
                                                 </select>
                                             </div> --}}
                                             <div class="col-12">
-                                                <label for="inputEmailAddress" class="form-label">Email</label>
+                                                <label for="inputEmailAddress" class="form-label">Mobile Number</label>
                                                 <input type="text" name="mobile_number" value="{{ old('mobile_number') }}"
                                                     class="form-control" id="inputEmailAddress"
                                                     placeholder="Mobile number">
