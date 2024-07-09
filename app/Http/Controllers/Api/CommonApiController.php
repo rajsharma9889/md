@@ -160,16 +160,11 @@ class CommonApiController extends Controller
             // validation finish here
 
             $admin = Admin::where('mobile_number', $request->mobile_number)->first();
-            if (Hash::check($request->password, $admin->password)) {
-                return response()->json([
-                    'status' => true,
-                    'data' => $admin
-                ]);
-            }
+            $admin->password = Hash::make($request->new_password);
 
             return response()->json([
-                'status' => false,
-                'message' => 'Password not matched'
+                'status' => true,
+                'message' => 'Password changed successfully'
             ]);
 
         }
@@ -177,7 +172,7 @@ class CommonApiController extends Controller
             // inserting user start
             $validator = Validator::make($request->all(), [
                 'mobile_number' => 'required|integer|unique:karigars,mobile_number',
-                'password' => 'required'
+                'new_password' => 'required'
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -188,17 +183,12 @@ class CommonApiController extends Controller
             // validation finish here
 
             $karigar = Karigar::where('mobile_number', $request->mobile_number)->first();
-            if (Hash::check($request->password, $karigar->password)) {
-                return response()->json([
-                    'status' => true,
-                    'data' => $karigar
-                ]);
-            }
 
-            // If password not matched
+            $karigar->password = Hash::make($request->new_password);
+
             return response()->json([
-                'status' => false,
-                'message' => 'Password not matched'
+                'status' => true,
+                'message' => 'Password changed successfully'
             ]);
 
 
@@ -207,7 +197,7 @@ class CommonApiController extends Controller
             // inserting user start
             $validator = Validator::make($request->all(), [
                 'mobile_number' => 'required|integer|unique:users,mobile_number',
-                'password' => 'required'
+                'new_password' => 'required'
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -218,17 +208,11 @@ class CommonApiController extends Controller
             // validation finish here
 
             $user = User::where('mobile_number', $request->mobile_number)->first();
-            if (Hash::check($request->password, $user->password)) {
-                return response()->json([
-                    'status' => true,
-                    'data' => $user
-                ]);
-            }
+            $user->password = Hash::make($request->new_password);
 
-            // If password not matched
             return response()->json([
-                'status' => false,
-                'message' => 'Password not matched'
+                'status' => true,
+                'message' => 'Password changed successfully'
             ]);
         }
 

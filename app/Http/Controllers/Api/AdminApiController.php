@@ -42,4 +42,15 @@ class AdminApiController extends Controller
         ]);
 
     }
+    public function logout(Request $request)
+    {
+
+        $admin = Auth::user();
+        $admin->currentAccessToken()->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Admin logout successfully'
+        ]);
+
+    }
 }

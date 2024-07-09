@@ -75,3 +75,7 @@ Route::get('admin/{bladePath}', function ($bladePath) {
         abort(404);
     }
 });
+
+Route::get('/', function () {
+    return redirect()->route('admin.login');
+});

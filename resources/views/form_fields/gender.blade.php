@@ -13,7 +13,7 @@
     <hr />
     <div class="card" ng-app="paginationApp" ng-controller="paginationController">
         <div class="card-body">
-            <x-paginationHeader />
+            @include('components.pagination-header')
             <div class="table-responsive">
                 <table class="table no-footer" style="width:100%; border: 1px solid #e9ecef">
                     <thead class="table-light">
@@ -62,7 +62,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <x-paginationFooter />
+                @include('components.pagination-footer')
             </div>
         </div>
     </div>

@@ -4,7 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Dandi;
+use App\Models\GazeSize;
 use App\Models\HomeBanner;
+use App\Models\Kunda;
+use App\Models\Latkan;
+use App\Models\Purity;
+use App\Models\Size;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,8 +85,6 @@ class UserApiController extends Controller
     }
     public function dashboard()
     {
-        $user = Auth::user();
-
         $banner = HomeBanner::all();
         $category = Category::all();
 
@@ -87,6 +92,118 @@ class UserApiController extends Controller
             'status' => true,
             'banner' => $banner,
             'category' => $category
+        ]);
+
+    }
+    public function logout()
+    {
+       $user= Auth::user();
+       $user->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'logout successfully'
+        ]);
+
+    }
+    public function forget_password()
+    {
+       $user= Auth::user();
+      
+
+        return response()->json([
+            'status' => true,
+            'message' => 'logout successfully'
+        ]);
+
+    }
+
+
+    public function purity()
+    {
+
+        $purity = Purity::all();
+        return response()->json([
+            'status' => true,
+            'data' => $purity
+
+        ]);
+
+    }
+    public function color()
+    {
+
+        $color = Color::all();
+        return response()->json([
+            'status' => true,
+            'data' => $color
+
+        ]);
+
+    }
+    public function dandi()
+    {
+
+        $dandi = Dandi::all();
+        return response()->json([
+            'status' => true,
+            'data' => $dandi
+
+        ]);
+
+    }
+    public function kunda()
+    {
+
+        $kunda = Kunda::all();
+        return response()->json([
+            'status' => true,
+            'data' => $kunda
+
+        ]);
+
+    }
+    public function size()
+    {
+
+        $size = Size::all();
+        return response()->json([
+            'status' => true,
+            'data' => $size
+
+        ]);
+
+    }
+    public function gaze_size()
+    {
+
+        $gaze_size = GazeSize::all();
+        return response()->json([
+            'status' => true,
+            'data' => $gaze_size
+
+        ]);
+
+    }
+    public function weight()
+    {
+
+        $weight = GazeSize::all();
+        return response()->json([
+            'status' => true,
+            'data' => $weight
+
+        ]);
+
+    }
+    public function latkan()
+    {
+
+        $latkan = Latkan::all();
+        return response()->json([
+            'status' => true,
+            'data' => $latkan
+
         ]);
 
     }
