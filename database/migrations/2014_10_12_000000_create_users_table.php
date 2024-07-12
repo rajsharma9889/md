@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('mobile_number');
             $table->string('password');
+            $table->boolean('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

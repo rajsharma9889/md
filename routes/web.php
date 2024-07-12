@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FormFieldsController;
 use App\Http\Controllers\KarigarController;
 use App\Http\Controllers\OtherDetailsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -16,6 +17,7 @@ Route::prefix('admin')->group(function () {
 Route::middleware('admin')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::any('/dashboard', [AdminController::class, 'dashboardIndex'])->name('admin.dashboard');
+        Route::any('/userrequest/{status?}/{id?}', [AdminController::class, 'requestsIndex'])->name('admin.userrequests');
         // Form fields
         Route::any('/gender/{status?}/{id?}', [FormFieldsController::class, 'genderIndex'])->name('admin.gender');
         Route::any('/purity/{status?}/{id?}', [FormFieldsController::class, 'purityIndex'])->name('admin.purity');
@@ -39,6 +41,8 @@ Route::middleware('admin')->group(function () {
         // Kaigar controller
         Route::any('/karigar/{status?}/{id?}', [KarigarController::class, 'karigarIndex'])->name('admin.karigar');
 
+        // User Controller
+        Route::any('/user/{status?}/{id?}', [UserController::class, 'userIndex'])->name('admin.user');
 
         // Other Details
         Route::any('/terms', [OtherDetailsController::class, 'termsIndex'])->name('admin.terms');
@@ -76,6 +80,9 @@ Route::get('admin/{bladePath}', function ($bladePath) {
     }
 });
 
+Route::get('/admin', function () {
+    return redirect()->route('admin.login');
+});
 Route::get('/', function () {
     return redirect()->route('admin.login');
 });

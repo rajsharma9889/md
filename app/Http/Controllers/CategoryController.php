@@ -58,7 +58,6 @@ class CategoryController extends Controller
             $category->weight = $request->weight;
             $category->save();
             return back()->with('success', 'Category added successfully.');
-
         }
         if ($request->isMethod('PUT')) {
 
@@ -90,7 +89,6 @@ class CategoryController extends Controller
             $category->weight = $request->weight;
             $category->save();
             return redirect()->route('admin.category')->with('success', 'Category updated successfully.');
-
         }
 
 

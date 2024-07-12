@@ -21,12 +21,56 @@
             <div class="menu-title">Karigar</div>
         </a>
     </li>
+    <li>
+        <a href="{{ route('admin.user') }}">
+            <div class="parent-icon"><i class='bx bxs-user'></i>
+            </div>
+            <div class="menu-title">User</div>
+        </a>
+    </li>
 
 
 
 
 
 
+
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon"> <i class='bx bxs-user-voice'></i>
+            </div>
+
+
+            <div class="menu-title">User Requests</div>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ route('admin.userrequests') }}">
+                    <i class='bx bx-stats'></i>
+                    All
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.userrequests') }}/pending">
+                    <i class='bx bx-stats'></i>
+                    Pending
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.userrequests') }}/accept">
+                    <i class='bx bx-stats'></i>
+                    Accept
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.userrequests') }}/reject">
+                    <i class='bx bx-stats'></i>
+                    Reject
+                </a>
+
+
+        </ul>
+    </li>
     <li>
         <a href="javascript:;" class="has-arrow">
             <div class="parent-icon"> <i class='bx bxs-customize'></i>
@@ -110,7 +154,7 @@
             </li>
             <li>
                 <a href="{{ route('admin.aboutus') }}">
-                    <i class='bx bxs-parking'></i>
+                    <i class='bx bxs-home-circle'></i>
                     About US
                 </a>
             </li>
@@ -122,7 +166,8 @@
             </li>
             <li>
                 <a href="{{ route('admin.privacy') }}">
-                    <i class='bx bxs-home-circle'></i>
+                    <i class='bx bxs-parking'></i>
+
                     Privacy Policy
                 </a>
             </li>

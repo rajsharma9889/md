@@ -51,7 +51,6 @@ class CommonApiController extends Controller
                     'data' => $admin,
                     'token' => $token
                 ]);
-
             }
 
             // $admin = Admin::where('mobile_number', $request->mobile_number)->first();
@@ -67,7 +66,6 @@ class CommonApiController extends Controller
                 'status' => false,
                 'message' => 'Password not matched',
             ]);
-
         }
         if ($request->role == 2) {
             // inserting user start
@@ -96,8 +94,6 @@ class CommonApiController extends Controller
                 'status' => false,
                 'message' => 'Password not matched'
             ]);
-
-
         }
         if ($request->role == 3) {
             // inserting user start
@@ -114,7 +110,15 @@ class CommonApiController extends Controller
             // validation finish here
 
             $user = User::where('mobile_number', $request->mobile_number)->first();
+            if (!$user->status) {
+                return response()->json([
+                    'status' => false,
+                    'massage' => 'You are prohibated by Admin.'
+
+                ]);
+            }
             if (Hash::check($request->password, $user->password)) {
+
                 $token = $user->createToken('user-token', ['user'])->plainTextToken;
                 return response()->json([
                     'status' => true,
@@ -128,10 +132,7 @@ class CommonApiController extends Controller
                 'status' => false,
                 'message' => 'Password not matched'
             ]);
-
-
         }
-
     }
     public function change_password(Request $request)
     {
@@ -166,7 +167,6 @@ class CommonApiController extends Controller
                 'status' => true,
                 'message' => 'Password changed successfully'
             ]);
-
         }
         if ($request->role == 2) {
             // inserting user start
@@ -190,8 +190,6 @@ class CommonApiController extends Controller
                 'status' => true,
                 'message' => 'Password changed successfully'
             ]);
-
-
         }
         if ($request->role == 3) {
             // inserting user start
@@ -215,7 +213,6 @@ class CommonApiController extends Controller
                 'message' => 'Password changed successfully'
             ]);
         }
-
     }
 
     public function pages(Request $request)

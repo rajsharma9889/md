@@ -28,7 +28,7 @@ class KarigarController extends Controller
             $karigar = Karigar::find($id);
             $karigar->status = !$karigar->status;
             $karigar->save();
-            return back()->with('success', 'Latkan Updated successfully.');
+            return back()->with('success', 'Karigar Updated successfully.');
         }
         if ($request->isMethod('POST')) {
             $validator = Validator::make($request->all(), [
