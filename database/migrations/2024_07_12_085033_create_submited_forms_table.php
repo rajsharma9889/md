@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('sizes')->nullable();
             $table->string('weights')->nullable();
             $table->enum('status', [0, 1, 2])->default(0);
+            $table->enum('karigar_status', [0, 1, 2])->default(0);
+            $table->text('reason')->nullable();
             $table->foreign('user_id')->on('users')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->on('categories')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

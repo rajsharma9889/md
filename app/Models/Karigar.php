@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
 class Karigar extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     public function scopeSearch($query, $search)
     {
@@ -24,5 +26,4 @@ class Karigar extends Model
         'password',
         'remember_token',
     ];
-
 }

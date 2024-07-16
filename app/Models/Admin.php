@@ -16,4 +16,8 @@ class Admin extends Authenticatable
         'remember_token',
     ];
 
+    public function username()
+    {
+        return 'mobile_number';
+    }
 }

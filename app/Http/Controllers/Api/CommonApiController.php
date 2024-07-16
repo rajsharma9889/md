@@ -53,24 +53,15 @@ class CommonApiController extends Controller
                 ]);
             }
 
-            // $admin = Admin::where('mobile_number', $request->mobile_number)->first();
-            // if (Hash::check($request->password, $admin->password)) {
-            //     $token = $admin->createToken('admin-token', ['admin'])->plainTextToken;
-            //     return response()->json([
-            //         'status' => true,
-            //         'data' => $admin,
-            //         'token' => $token
-            //     ]);
-            // }
             return response()->json([
                 'status' => false,
                 'message' => 'Password not matched',
             ]);
         }
         if ($request->role == 2) {
-            // inserting user start
+            // inserting karigar start
             $validator = Validator::make($request->all(), [
-                'mobile_number' => 'required|integer|unique:karigars,mobile_number',
+                'mobile_number' => 'required|integer|exists:karigars,mobile_number',
                 'password' => 'required'
             ]);
             if ($validator->fails()) {
@@ -82,17 +73,29 @@ class CommonApiController extends Controller
             // validation finish here
 
             $karigar = Karigar::where('mobile_number', $request->mobile_number)->first();
-            if (Hash::check($request->password, $karigar->password)) {
-                return response()->json([
-                    'status' => true,
-                    'data' => $karigar
-                ]);
+            if ($karigar) {
+                if (!$karigar->status) {
+                    return response()->json([
+                        'status' => false,
+                        'massage' => 'You are prohibated by Admin.'
+
+                    ]);
+                }
+                if (Hash::check($request->password, $karigar->password)) {
+                    $token = $karigar->createToken('karigar-token', ['karigar'])->plainTextToken;
+                    return response()->json([
+                        'status' => true,
+                        'data' => $karigar,
+                        'token' => $token
+                    ]);
+                }
             }
+
 
             // If password not matched
             return response()->json([
                 'status' => false,
-                'message' => 'Password not matched'
+                'message' => 'Password not matched or user not found'
             ]);
         }
         if ($request->role == 3) {
@@ -118,7 +121,6 @@ class CommonApiController extends Controller
                 ]);
             }
             if (Hash::check($request->password, $user->password)) {
-
                 $token = $user->createToken('user-token', ['user'])->plainTextToken;
                 return response()->json([
                     'status' => true,
@@ -127,7 +129,7 @@ class CommonApiController extends Controller
                 ]);
             }
 
-            // If password not matched
+            // If password not matched 
             return response()->json([
                 'status' => false,
                 'message' => 'Password not matched'

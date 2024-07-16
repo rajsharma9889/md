@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -11,7 +12,7 @@ class AdminApiController extends Controller
 {
     public function check_admin(Request $request)
     {
-
+        // return auth()->user();
         $validator = Validator::make($request->all(), [
             'mobile_number' => 'required|integer|exists:admins,mobile_number',
         ]);
@@ -21,17 +22,14 @@ class AdminApiController extends Controller
                 'error' => $validator->errors()->first()
             ]);
         }
-        // // validation finish here
-
-        $admin = Auth::user();
-
+        $admin = Admin::where('mobile_number', $request->mobile_number)->first();
         return response()->json([
             'status' => true,
-            'data' => $admin
+            'message' => $admin
         ]);
-
     }
-    public function getprofile(Request $request)
+
+    public function getprofile()
     {
 
         $admin = Auth::user();
@@ -40,9 +38,8 @@ class AdminApiController extends Controller
             'status' => true,
             'data' => $admin
         ]);
-
     }
-    public function logout(Request $request)
+    public function logout()
     {
 
         $admin = Auth::user();
@@ -51,6 +48,5 @@ class AdminApiController extends Controller
             'status' => true,
             'message' => 'Admin logout successfully'
         ]);
-
     }
 }

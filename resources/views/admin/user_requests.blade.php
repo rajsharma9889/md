@@ -22,6 +22,7 @@
                         <th>Category Name </th>
                         <th>User M.N. </th>
                         <th>Status</th>
+                        <th>karigar</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -29,7 +30,6 @@
                     <tr dir-paginate="item in users | filter: q | itemsPerPage: usersPerPage" total-items="totalUsers"
                         current-page="pagination.current">
                         <td>@{{ getSerialNumber($index) }}</td>
-
                         <td>@{{ item.category.category }}</td>
                         <td>@{{ item.user.mobile_number }}</td>
                         <td>
@@ -37,16 +37,42 @@
                             <span ng-if="item.status == 1" class="badge rounded-pill bg-success">Accept</span>
                             <span ng-if="item.status == 2" class="badge rounded-pill bg-danger">Reject</span>
                         </td>
+                        <td ng-if="item.karigar_status==2">
+                            <a title="some" class="text-decoration-none text-black" href="#">View</a>
+                        </td>
                         <td>
                             <div class="dropdown dropstart d-flex order-actions">
                                 <a href="javascript:;" class="mx-1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" ng-if='item.status ==0'>
                                     <li class="py-1">
                                         <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
-                                            href="{{ route('admin.karigar') }}/change_status/@{{ item.id }}">@{{
-                                            item.status == 1 ? "Mark Inactive" : "Mark Active" }}</a>
+                                            href="{{ route('admin.userrequests') }}/change_status_accept/@{{ item.id }}">Accept</a>
+                                    </li>
+                                    <li class="py-1">
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.userrequests') }}/change_status_reject/@{{ item.id }}">Reject</a>
+                                    </li>
+                                </ul>
+                                <ul class="dropdown-menu" ng-if='item.status ==1'>
+                                    <li class="py-1">
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.userrequests') }}/change_status_pending/@{{ item.id }}">Pending</a>
+                                    </li>
+                                    <li class="py-1">
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.userrequests') }}/change_status_reject/@{{ item.id }}">Reject</a>
+                                    </li>
+                                </ul>
+                                <ul class="dropdown-menu" ng-if='item.status ==2'>
+                                    <li class="py-1">
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.userrequests') }}/change_status_pending/@{{ item.id }}">Pending</a>
+                                    </li>
+                                    <li class="py-1">
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.userrequests') }}/change_status_accept/@{{ item.id }}">Accept</a>
                                     </li>
                                 </ul>
                             </div>

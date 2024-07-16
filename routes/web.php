@@ -31,8 +31,6 @@ Route::middleware('admin')->group(function () {
 
 
 
-
-
         // Category 
         Route::any('/category/{status?}/{id?}', [CategoryController::class, 'categoryIndex'])->name('admin.category');
         Route::any('/add_category/{id?}', [CategoryController::class, 'add_category_page'])->name('add_category');

@@ -45,6 +45,26 @@ class AdminController extends Controller
     }
     public function requestsIndex(Request $request, $status = null, $id = null)
     {
+
+        if ($status == 'change_status_accept') {
+            $sub_form = SubmitedForms::find($id);
+            $sub_form->status = '1';
+            $sub_form->save();
+            return back()->with('success', 'Form Accept successfully');
+        }
+        if ($status == 'change_status_pending') {
+            $sub_form = SubmitedForms::find($id);
+            $sub_form->status = '0';
+            $sub_form->save();
+            return back()->with('success', 'Form Pending successfully');
+        }
+        if ($status == 'change_status_reject') {
+            $sub_form = SubmitedForms::find($id);
+            $sub_form->status = '2';
+            $sub_form->save();
+            return back()->with('success', 'Form Rejected successfully');
+        }
+
         if ($status == 'pending') {
             $dataQuery = SubmitedForms::where('status', '0')->with('category', 'user');
 

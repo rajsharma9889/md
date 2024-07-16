@@ -61,11 +61,11 @@ class UserApiController extends Controller
         }
         // // validation finish here
 
-        $admin = Auth::user();
+        $user = User::where('mobile_number', $request->mobile_number)->first();
 
         return response()->json([
             'status' => true,
-            'data' => $admin
+            'data' => $user
         ]);
     }
 
