@@ -3,18 +3,29 @@
 use App\Http\Controllers\Api\CommonApiController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\AdminApiController;
+use App\Http\Controllers\Api\KarigarApiController;
 use Illuminate\Support\Facades\Route;
 
+// Common Route
+Route::post('/login', [CommonApiController::class, 'login']);
+Route::post('/pages', [CommonApiController::class, 'pages']);
+Route::post('/change_password', [CommonApiController::class, 'change_password']);
+
+
+// ***********************************************************************************//
 // Admin Auth Route
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
-    Route::post('/check_admin', [AdminApiController::class, 'check_admin']);
     Route::get('/admin/getprofile', [AdminApiController::class, 'getprofile']);
     Route::post('/admin/logout', [AdminApiController::class, 'logout']);
 });
+// Admin normal Route
+Route::post('/check_admin', [AdminApiController::class, 'check_admin']);
 
+
+
+// ***********************************************************************************//
 // User Auth Route
 Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
-    Route::post('/check_user', [UserApiController::class, 'check_user']);
     Route::get('/user/getprofile', [UserApiController::class, 'getprofile']);
     Route::get('/dashboard', [UserApiController::class, 'dashboard']);
     Route::post('/user/logout', [UserApiController::class, 'logout']);
@@ -35,17 +46,21 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     Route::post('/formsubmit', [UserApiController::class, 'formSubmit']);
     Route::post('/checkCat', [UserApiController::class, 'checkCat']);
 });
-
-
-
-
 // User Normal Route
-Route::post('/signup', [UserApiController::class, 'singup']);
+Route::post('/user_signup', [UserApiController::class, 'singup']);
+Route::post('/check_user', [UserApiController::class, 'check_user']);
 
 
 
+// ***********************************************************************************//
+// Auth Karigar Route
+Route::middleware(['auth:sanctum', 'abilities:karigar'])->group(function () {
+    Route::get('/karigar/getprofile', [karigarApiController::class, 'getprofile']);
+    Route::post('/karigar/logout', [karigarApiController::class, 'logout']);
+    Route::post('/karigar/checkCat', [karigarApiController::class, 'checkCat']);
+    Route::post('/karigar/change_status', [karigarApiController::class, 'changeStatus']);
+});
 
-// Common Route
-Route::post('/login', [CommonApiController::class, 'login']);
-Route::post('/pages', [CommonApiController::class, 'pages']);
-Route::post('/change_password', [CommonApiController::class, 'change_password']);
+// Normal Karigar Route
+Route::post('/check_karigar', [karigarApiController::class, 'check_karigar']);
+Route::post('/karigar_signup', [KarigarApiController::class, 'singup']);
