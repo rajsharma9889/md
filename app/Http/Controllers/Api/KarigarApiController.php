@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Karigar;
+use App\Models\KarigarRequestList;
 use App\Models\SubmitedForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,6 +121,7 @@ class KarigarApiController extends Controller
             if ($request->status == 2) {
                 $validator = Validator::make($request->all(), [
                     'reason' => 'required|string|',
+                    'form_id' => 'required|integer|exists:submited_forms,id'
                 ]);
             }
             if ($validator->fails()) {
@@ -150,16 +152,24 @@ class KarigarApiController extends Controller
                 ]);
             }
             if ($request->status == 2) {
-                $form->karigar_status = $request->status;
-                $form->reason = $request->reason;
+                $form->karigar_status = 1;
                 $form->save();
+
+                $karigarRequest = new KarigarRequestList;
+                $karigarRequest->reason = $request->reason;
+                $karigarRequest->form_id = $request->form_id;
+                $karigarRequest->karigar_id = Auth::user()->id;
+                $karigarRequest->save();
+
                 return response()->json([
                     'status' => true,
                     'data' => $form
                 ]);
             }
         } catch (\Throwable $th) {
-            throw $th;
+            return response()->json([
+                'error' => throw $th
+            ]);
         }
     }
 }

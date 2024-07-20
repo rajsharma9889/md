@@ -17,7 +17,11 @@ Route::prefix('admin')->group(function () {
 Route::middleware('admin')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::any('/dashboard', [AdminController::class, 'dashboardIndex'])->name('admin.dashboard');
+
+        // Form User Request
         Route::any('/userrequest/{status?}/{id?}', [AdminController::class, 'requestsIndex'])->name('admin.userrequests');
+        Route::any('/karigarreject/{formId?}/{status?}/{id?}', [AdminController::class, 'rejectByKarigarIndex'])->name('admin.rejectKarigar');
+
         // Form fields
         Route::any('/gender/{status?}/{id?}', [FormFieldsController::class, 'genderIndex'])->name('admin.gender');
         Route::any('/purity/{status?}/{id?}', [FormFieldsController::class, 'purityIndex'])->name('admin.purity');

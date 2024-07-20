@@ -164,7 +164,7 @@ class CommonApiController extends Controller
 
             $admin = Admin::where('mobile_number', $request->mobile_number)->first();
             $admin->password = Hash::make($request->new_password);
-
+            $admin->save();
             return response()->json([
                 'status' => true,
                 'message' => 'Password changed successfully'
@@ -173,7 +173,7 @@ class CommonApiController extends Controller
         if ($request->role == 2) {
             // inserting user start
             $validator = Validator::make($request->all(), [
-                'mobile_number' => 'required|integer|unique:karigars,mobile_number',
+                'mobile_number' => 'required|integer|exists:karigars,mobile_number',
                 'new_password' => 'required'
             ]);
             if ($validator->fails()) {
@@ -185,9 +185,8 @@ class CommonApiController extends Controller
             // validation finish here
 
             $karigar = Karigar::where('mobile_number', $request->mobile_number)->first();
-
             $karigar->password = Hash::make($request->new_password);
-
+            $karigar->save();
             return response()->json([
                 'status' => true,
                 'message' => 'Password changed successfully'
@@ -196,7 +195,7 @@ class CommonApiController extends Controller
         if ($request->role == 3) {
             // inserting user start
             $validator = Validator::make($request->all(), [
-                'mobile_number' => 'required|integer|unique:users,mobile_number',
+                'mobile_number' => 'required|integer|exists:users,mobile_number',
                 'new_password' => 'required'
             ]);
             if ($validator->fails()) {
@@ -209,7 +208,7 @@ class CommonApiController extends Controller
 
             $user = User::where('mobile_number', $request->mobile_number)->first();
             $user->password = Hash::make($request->new_password);
-
+            $user->save();
             return response()->json([
                 'status' => true,
                 'message' => 'Password changed successfully'

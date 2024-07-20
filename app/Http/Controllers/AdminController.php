@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\KarigarRequestList;
 use App\Models\SubmitedForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -96,7 +97,9 @@ class AdminController extends Controller
             }
             $page_data['page_title'] = 'Accept Requests';
         } elseif ($status == 'reject') {
-            $dataQuery = SubmitedForms::with('category', 'user')->where('status', '2');
+            $dataQuery = SubmitedForms::with('category', 'user', 'rejectRequests')
+                ->where('status', '2')
+                ->orWhere('karigar_status', 1);
             if ($request->has('true')) {
                 $perPage = $request->input('pageLimit', 10);
                 $searchFilter = $request->input('searchFilter');
@@ -125,5 +128,31 @@ class AdminController extends Controller
             $page_data['page_title'] = 'All Requests';
         }
         return view('admin.user_requests', compact('page_data'));
+    }
+
+
+
+    public function rejectByKarigarIndex(Request $request, $formId, $status = null, $id = null)
+    {
+
+        $dataQuery = KarigarRequestList::where('form_id', $formId)
+            ->with('karigar');
+
+        if ($request->has('true')) {
+            $perPage = $request->input('pageLimit', 10);
+            $searchFilter = $request->input('searchFilter');
+
+            if ($searchFilter !== "") {
+                $dataQuery->search($searchFilter);
+            }
+
+            $data = $dataQuery->paginate($perPage);
+            return response()->json($data);
+        }
+
+    
+
+        $page_data['page_title'] = 'All Rejected list';
+        return view('admin.rejectKarigarList', compact('page_data'));
     }
 }

@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('category');
+            $table->string('image');
             $table->enum('gender', [0, 1, 2])->nullable();
             $table->enum('purity', [0, 1, 2])->nullable();
             $table->enum('color', [0, 1, 2])->nullable();

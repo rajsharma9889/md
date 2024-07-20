@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SubmitedForms extends Model
+class KarigarRequestList extends Model
 {
     use HasFactory;
 
@@ -20,17 +20,8 @@ class SubmitedForms extends Model
         });
     }
 
-    public function category()
+    public function karigar()
     {
-        return $this->belongsTo(Category::class);
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function rejectRequests()
-    {
-        return $this->hasMany(KarigarRequestList::class,'id');
+        return  $this->belongsTo(Karigar::class, 'karigar_id');
     }
 }

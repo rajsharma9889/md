@@ -1,8 +1,8 @@
 @extends('template')
 @section('content')
 <div class="row">
+    <h6 class="mb-0 text-uppercase">{{ $page_data['page_title'] }}</h6>
     {{-- <div class="col-6">
-        <h6 class="mb-0 text-uppercase">{{ $page_data['page_title'] }}</h6>
     </div>
     <div class="col-6 text-end px-0 px-lg-3">
         <button type="button"
@@ -22,13 +22,14 @@
                         <th>Category Name </th>
                         <th>User M.N. </th>
                         <th>Status</th>
-                        <th>karigar</th>
+                        {{-- <th>Rejected By</th> --}}
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr dir-paginate="item in users | filter: q | itemsPerPage: usersPerPage" total-items="totalUsers"
                         current-page="pagination.current">
+                        {{-- <td>@{{ item }}</td> --}}
                         <td>@{{ getSerialNumber($index) }}</td>
                         <td>@{{ item.category.category }}</td>
                         <td>@{{ item.user.mobile_number }}</td>
@@ -37,15 +38,13 @@
                             <span ng-if="item.status == 1" class="badge rounded-pill bg-success">Accept</span>
                             <span ng-if="item.status == 2" class="badge rounded-pill bg-danger">Reject</span>
                         </td>
-                        <td ng-if="item.karigar_status==2">
-                            <a title="some" class="text-decoration-none text-black" href="#">View</a>
-                        </td>
                         <td>
                             <div class="dropdown dropstart d-flex order-actions">
                                 <a href="javascript:;" class="mx-1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                 </a>
-                                <ul class="dropdown-menu" ng-if='item.status ==0'>
+
+                                <ul class="dropdown-menu" ng-if='item.status == 0'>
                                     <li class="py-1">
                                         <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
                                             href="{{ route('admin.userrequests') }}/change_status_accept/@{{ item.id }}">Accept</a>
@@ -66,6 +65,7 @@
                                     </li>
                                 </ul>
                                 <ul class="dropdown-menu" ng-if='item.status ==2'>
+
                                     <li class="py-1">
                                         <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
                                             href="{{ route('admin.userrequests') }}/change_status_pending/@{{ item.id }}">Pending</a>
@@ -74,7 +74,17 @@
                                         <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
                                             href="{{ route('admin.userrequests') }}/change_status_accept/@{{ item.id }}">Accept</a>
                                     </li>
+                                    <li class="py-1" ng-if='item.karigar_status ==1'>
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.rejectKarigar') }}/@{{ item.id }}">View</a>
+                                    </li>
+                                    <li class="py-1" ng-if='item.karigar_status ==1'>
+                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
+                                            href="{{ route('admin.userrequests') }}/change_status_reject/@{{ item.id }}">Reject
+                                            Accepted</a>
+                                    </li>
                                 </ul>
+
                             </div>
                         </td>
                     </tr>

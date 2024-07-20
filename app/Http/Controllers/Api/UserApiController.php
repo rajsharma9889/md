@@ -25,6 +25,9 @@ class UserApiController extends Controller
     {
         // inserting user start
         $validator = Validator::make($request->all(), [
+
+            'name' => 'required|string',
+            'city' => 'required|string',
             'mobile_number' => 'required|integer|unique:users,mobile_number',
             'password' => 'required'
         ]);
@@ -37,12 +40,16 @@ class UserApiController extends Controller
         // validation finish here
 
         $user = new User;
+        $user->name = $request->name;
         $user->mobile_number = $request->mobile_number;
+        $user->city = $request->city;
         $user->password = Hash::make($request->password);
         $user->save();
+        $token = $user->createToken('user-token', ['user'])->plainTextToken;
         return response()->json([
             'status' => true,
-            'data' => $user
+            'data' => $user,
+            'token' => $token
         ]);
     }
 

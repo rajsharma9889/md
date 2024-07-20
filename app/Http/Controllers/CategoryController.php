@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -41,11 +42,14 @@ class CategoryController extends Controller
                 'size' => 'required|in:0,1,2',
                 'gaze_size' => 'required|in:0,1,2',
                 'weight' => 'required|in:0,1,2',
+                'image' => 'required'
             ]);
 
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->with('error', $validator->errors()->first());
             }
+            $path = $request->image->store('category', 'public');
+
             $category = new Category;
             $category->category = $request->category;
             $category->gender = $request->gender;
@@ -56,6 +60,7 @@ class CategoryController extends Controller
             $category->size = $request->size;
             $category->gaze_size = $request->gaze_size;
             $category->weight = $request->weight;
+            $category->image = 'public/storage/' . $path;
             $category->save();
             return back()->with('success', 'Category added successfully.');
         }
@@ -77,6 +82,7 @@ class CategoryController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->with('error', $validator->errors()->first());
             }
+
             $category = Category::find($request->id);
             $category->category = $request->category;
             $category->gender = $request->gender;
@@ -87,6 +93,14 @@ class CategoryController extends Controller
             $category->size = $request->size;
             $category->gaze_size = $request->gaze_size;
             $category->weight = $request->weight;
+            // Handle Image
+            if ($request->image) {
+                if (File::exists($category->image)) {
+                    File::delete($category->image);
+                }
+                $path = $request->image->store('category', 'public');
+                $category->image = 'public/storage/' . $path;
+            }
             $category->save();
             return redirect()->route('admin.category')->with('success', 'Category updated successfully.');
         }
