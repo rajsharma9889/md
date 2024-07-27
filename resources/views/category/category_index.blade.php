@@ -18,8 +18,9 @@
                     <tr id="thead-html">
                         <th>S no.</th>
                         <th>Category Name </th>
+                        <th>Image</th>
                         <th>Status</th>
-             
+
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -27,13 +28,13 @@
                     <tr dir-paginate="item in users | filter: q | itemsPerPage: usersPerPage" total-items="totalUsers"
                         current-page="pagination.current">
                         <td>@{{ getSerialNumber($index) }}</td>
-
                         <td>@{{ item.category }}</td>
+                        <th><img width="24px" src="{{ asset('') }}@{{ item.image }}" alt=""></th>
                         <td>
                             <span ng-if="item.status == 1" class="badge rounded-pill bg-success">Active</span>
                             <span ng-if="item.status == 0" class="badge rounded-pill bg-danger">Inactive</span>
                         </td>
-                    
+
                         <td>
                             <div class="dropdown dropstart d-flex order-actions">
                                 <a href="javascript:;" class="mx-1" data-bs-toggle="dropdown" aria-expanded="false">

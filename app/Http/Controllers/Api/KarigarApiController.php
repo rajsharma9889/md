@@ -114,9 +114,10 @@ class KarigarApiController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'status' => 'required|integer|in:1,2',
+                'status' => 'required|integer|in:1,2,3',
                 'category_id' => 'required|exists:categories,id',
-                'user_id' => 'required|exists:users,id'
+                'form_id' => 'required|integer|exists:submited_forms,id'
+                // 'user_id' => 'required|exists:users,id'
             ]);
             if ($request->status == 2) {
                 $validator = Validator::make($request->all(), [
@@ -130,42 +131,31 @@ class KarigarApiController extends Controller
                     'error' => $validator->errors()->first()
                 ]);
             }
-
-
-            $form = SubmitedForms::where('user_id', $request->user_id)
-                ->where('category_id', $request->user_id)
-                ->first();
-
-            if (!$form) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'data not found'
-                ]);
-            }
+            $form = SubmitedForms::find($request->form_id);
+            $req_list = KarigarRequestList::where('form_id', $request->form_id)->where('karigar_id', Auth::user()->id)->first();
 
             if ($request->status == 1) {
-                $form->status = $request->status;
+                $req_list->status = 1;
+                $req_list->save();
+                // Changing form status
+                $form->status = '1';
                 $form->save();
-                return response()->json([
-                    'status' => true,
-                    'data' => $form
-                ]);
             }
             if ($request->status == 2) {
-                $form->karigar_status = 1;
-                $form->save();
-
-                $karigarRequest = new KarigarRequestList;
-                $karigarRequest->reason = $request->reason;
-                $karigarRequest->form_id = $request->form_id;
-                $karigarRequest->karigar_id = Auth::user()->id;
-                $karigarRequest->save();
-
-                return response()->json([
-                    'status' => true,
-                    'data' => $form
-                ]);
+                $req_list->status = 2;
+                $req_list->reason = $request->reason;
+                $req_list->save();
             }
+            if ($request->status == 3) {
+                $req_list->status = 3;
+                $req_list->save();
+                $form->status = '2';
+                $form->save();
+            }
+
+            return response()->json([
+                'data' => [$form, $req_list]
+            ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => throw $th

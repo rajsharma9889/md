@@ -20,7 +20,8 @@
                     <tr id="thead-html">
                         <th>S no.</th>
                         <th>Karigar Name </th>
-                        <th>Karigar M.N. </th>
+                        <th>Karigar Mob </th>
+                        <th>Category Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -31,6 +32,7 @@
                         <td>@{{ getSerialNumber($index) }}</td>
                         <td>@{{ item.karigar.name }}</td>
                         <td>@{{ item.karigar.mobile_number }}</td>
+                        <td>@{{ item.form.category.category }}</td>
 
                         <td>
                             <div class="dropdown dropstart d-flex order-actions">

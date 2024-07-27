@@ -46,30 +46,16 @@ class AdminController extends Controller
     }
     public function requestsIndex(Request $request, $status = null, $id = null)
     {
-
-        if ($status == 'change_status_accept') {
-            $sub_form = SubmitedForms::find($id);
-            $sub_form->status = '1';
-            $sub_form->save();
-            return back()->with('success', 'Form Accept successfully');
-        }
-        if ($status == 'change_status_pending') {
-            $sub_form = SubmitedForms::find($id);
-            $sub_form->status = '0';
-            $sub_form->save();
-            return back()->with('success', 'Form Pending successfully');
-        }
-        if ($status == 'change_status_reject') {
-            $sub_form = SubmitedForms::find($id);
-            $sub_form->status = '2';
-            $sub_form->save();
-            return back()->with('success', 'Form Rejected successfully');
+        if ($status == 'complete') {
+            $form = SubmitedForms::find($id);
+            $form->status = '3';
+            $form->save();
+            return back()->with('success', 'Mark Completed');
         }
 
-        if ($status == 'pending') {
-            $dataQuery = SubmitedForms::where('status', '0')->with('category', 'user');
 
-            // dd($dataQuery);
+        if ($status == 'completedlist') {
+            $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('3');
             if ($request->has('true')) {
                 $perPage = $request->input('pageLimit', 10);
                 $searchFilter = $request->input('searchFilter');
@@ -81,62 +67,89 @@ class AdminController extends Controller
                 $data = $dataQuery->paginate($perPage);
                 return response()->json($data);
             }
-            $page_data['page_title'] = 'Pending Requests';
-        } elseif ($status == 'accept') {
-            $dataQuery = SubmitedForms::where('status', '1')->with('category', 'user');
-            if ($request->has('true')) {
-                $perPage = $request->input('pageLimit', 10);
-                $searchFilter = $request->input('searchFilter');
-
-                if ($searchFilter !== "") {
-                    $dataQuery->search($searchFilter);
-                }
-
-                $data = $dataQuery->paginate($perPage);
-                return response()->json($data);
-            }
-            $page_data['page_title'] = 'Accept Requests';
-        } elseif ($status == 'reject') {
-            $dataQuery = SubmitedForms::with('category', 'user', 'rejectRequests')
-                ->where('status', '2')
-                ->orWhere('karigar_status', 1);
-            if ($request->has('true')) {
-                $perPage = $request->input('pageLimit', 10);
-                $searchFilter = $request->input('searchFilter');
-
-                if ($searchFilter !== "") {
-                    $dataQuery->search($searchFilter);
-                }
-
-                $data = $dataQuery->paginate($perPage);
-                return response()->json($data);
-            }
-            $page_data['page_title'] = 'Reject Requests';
-        } else {
-            $dataQuery = SubmitedForms::with('category', 'user');
-            if ($request->has('true')) {
-                $perPage = $request->input('pageLimit', 10);
-                $searchFilter = $request->input('searchFilter');
-
-                if ($searchFilter !== "") {
-                    $dataQuery->search($searchFilter);
-                }
-
-                $data = $dataQuery->paginate($perPage);
-                return response()->json($data);
-            }
-            $page_data['page_title'] = 'All Requests';
+            $page_data['page_title'] = 'Completed Items';
         }
-        return view('admin.user_requests', compact('page_data'));
+        if ($status == 'ready') {
+            $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('2');
+            if ($request->has('true')) {
+                $perPage = $request->input('pageLimit', 10);
+                $searchFilter = $request->input('searchFilter');
+
+                if ($searchFilter !== "") {
+                    $dataQuery->search($searchFilter);
+                }
+
+                $data = $dataQuery->paginate($perPage);
+                return response()->json($data);
+            }
+            $page_data['page_title'] = 'Ready to Pick';
+        }
+        if ($status == 'working') {
+            $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('1');
+            if ($request->has('true')) {
+                $perPage = $request->input('pageLimit', 10);
+                $searchFilter = $request->input('searchFilter');
+
+                if ($searchFilter !== "") {
+                    $dataQuery->search($searchFilter);
+                }
+
+                $data = $dataQuery->paginate($perPage);
+                return response()->json($data);
+            }
+            $page_data['page_title'] = 'Working Requests';
+        }
+
+
+
+
+
+
+
+
+
+        if ($request->isMethod('POST')) {
+            $validator = Validator::make($request->all(), [
+                'selected_karigar' => 'required|string|exists:karigars,id',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->with('error', $validator->errors()->first());
+            }
+
+            $req_list = new KarigarRequestList;
+            $req_list->karigar_id = $request->selected_karigar;
+            $req_list->form_id = $request->form_id;
+            $req_list->save();
+            return back()->with('success', 'Assiged successfully.');
+        }
+
+        if (!$status) {
+            $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('0');
+            if ($request->has('true')) {
+                $perPage = $request->input('pageLimit', 10);
+                $searchFilter = $request->input('searchFilter');
+
+                if ($searchFilter !== "") {
+                    $dataQuery->search($searchFilter);
+                }
+
+                $data = $dataQuery->paginate($perPage);
+                return response()->json($data);
+            }
+            $page_data['page_title'] = 'New Requests';
+        }
+
+
+        return view('admin.user_new_requests', compact('page_data'));
     }
 
 
 
-    public function rejectByKarigarIndex(Request $request, $formId, $status = null, $id = null)
+    public function rejectByKarigarIndex(Request $request, $status = null, $id = null)
     {
 
-        $dataQuery = KarigarRequestList::where('form_id', $formId)
-            ->with('karigar');
+        $dataQuery = KarigarRequestList::whereStatus(2)->with('karigar', 'form.category');
 
         if ($request->has('true')) {
             $perPage = $request->input('pageLimit', 10);
@@ -150,9 +163,31 @@ class AdminController extends Controller
             return response()->json($data);
         }
 
-    
 
-        $page_data['page_title'] = 'All Rejected list';
+
+        $page_data['page_title'] = 'Reject By Karigars';
+        return view('admin.rejectKarigarList', compact('page_data'));
+    }
+    public function assignedKarigarIndex(Request $request, $status = null, $id = null)
+    {
+
+        $dataQuery = KarigarRequestList::whereStatus(0)->with('karigar', 'form.category');
+
+        if ($request->has('true')) {
+            $perPage = $request->input('pageLimit', 10);
+            $searchFilter = $request->input('searchFilter');
+
+            if ($searchFilter !== "") {
+                $dataQuery->search($searchFilter);
+            }
+
+            $data = $dataQuery->paginate($perPage);
+            return response()->json($data);
+        }
+
+
+
+        $page_data['page_title'] = 'Assinged Karigars';
         return view('admin.rejectKarigarList', compact('page_data'));
     }
 }

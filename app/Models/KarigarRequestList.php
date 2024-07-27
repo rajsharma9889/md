@@ -24,4 +24,8 @@ class KarigarRequestList extends Model
     {
         return  $this->belongsTo(Karigar::class, 'karigar_id');
     }
+    public function form()
+    {
+        return  $this->belongsTo(SubmitedForms::class, 'form_id');
+    }
 }

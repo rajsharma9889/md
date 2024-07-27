@@ -45,30 +45,47 @@
         </a>
         <ul>
             <li>
-                <a href="{{ route('admin.userrequests') }}">
+                <a href="{{ route('admin.user_new_requests') }}">
                     <i class='bx bx-stats'></i>
-                    All
+                    New
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.userrequests') }}/pending">
+                <a href="{{ route('admin.assigned_karigar') }}">
                     <i class='bx bx-stats'></i>
-                    Pending
+                    Assigned karigar
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.userrequests') }}/accept">
+                <a href="{{ route('admin.reject_by_karigar') }}">
                     <i class='bx bx-stats'></i>
-                    Accept
+                    Reject By Karigar
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.userrequests') }}/reject">
+                <a href="{{ route('admin.user_new_requests') }}/accept">
                     <i class='bx bx-stats'></i>
                     Reject
                 </a>
-
-
+            </li>
+            <li>
+                <a href="{{ route('admin.user_new_requests') }}/working">
+                    <i class='bx bx-stats'></i>
+                    Working
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.user_new_requests') }}/ready">
+                    <i class='bx bx-stats'></i>
+                    Ready to pick
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.user_new_requests') }}/completedlist">
+                    <i class='bx bx-stats'></i>
+                    Complete
+                </a>
+            </li>
         </ul>
     </li>
     <li>

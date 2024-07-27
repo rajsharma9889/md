@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('karigar_request_lists', function (Blueprint $table) {
             $table->id();
-            $table->text('reason');
+            $table->text('reason')->nullable();
+            $table->string('status')->default(0);
             $table->unsignedBigInteger('form_id');
             $table->unsignedBigInteger('karigar_id');
             $table->foreign('karigar_id')->on('karigars')->references('id')->onDelete('cascade')->onUpdate('cascade');

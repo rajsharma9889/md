@@ -19,8 +19,10 @@ Route::middleware('admin')->group(function () {
         Route::any('/dashboard', [AdminController::class, 'dashboardIndex'])->name('admin.dashboard');
 
         // Form User Request
-        Route::any('/userrequest/{status?}/{id?}', [AdminController::class, 'requestsIndex'])->name('admin.userrequests');
-        Route::any('/karigarreject/{formId?}/{status?}/{id?}', [AdminController::class, 'rejectByKarigarIndex'])->name('admin.rejectKarigar');
+        Route::any('/userrequest/{status?}/{id?}', [AdminController::class, 'requestsIndex'])->name('admin.user_new_requests');
+      
+        Route::any('/reject_by_karigar/{status?}/{id?}', [AdminController::class, 'rejectByKarigarIndex'])->name('admin.reject_by_karigar');
+        Route::any('/assigned_karigar/{status?}/{id?}', [AdminController::class, 'assignedKarigarIndex'])->name('admin.assigned_karigar');
 
         // Form fields
         Route::any('/gender/{status?}/{id?}', [FormFieldsController::class, 'genderIndex'])->name('admin.gender');
