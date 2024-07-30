@@ -52,8 +52,31 @@ class AdminController extends Controller
             $form->save();
             return back()->with('success', 'Mark Completed');
         }
+        if ($status == 'reject') {
+            // return 
+            $form = SubmitedForms::find($request->form_id);
+            return $form;
+            // $form->status = '4';
+            // $form->save();
+            // return back()->with('success', 'Mark Rejected');
+        }
 
 
+        if ($status == 'rejected') {
+            $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('4');
+            if ($request->has('true')) {
+                $perPage = $request->input('pageLimit', 10);
+                $searchFilter = $request->input('searchFilter');
+
+                if ($searchFilter !== "") {
+                    $dataQuery->search($searchFilter);
+                }
+
+                $data = $dataQuery->paginate($perPage);
+                return response()->json($data);
+            }
+            $page_data['page_title'] = 'Rejected Items';
+        }
         if ($status == 'completedlist') {
             $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('3');
             if ($request->has('true')) {
@@ -100,14 +123,26 @@ class AdminController extends Controller
             $page_data['page_title'] = 'Working Requests';
         }
 
+        if ($request->isMethod('PUT')) {
+            $validator = Validator::make($request->all(), [
+                'reason' => 'required|string|',
+            ]);
 
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->with('error', $validator->errors()->first());
+            }
+            $form = SubmitedForms::find($request->form_id);
+            $form->status = '4';
+            $karigarList = KarigarRequestList::where('form_id', $request->form_id)->first();
 
-
-
-
-
-
-
+            if ($karigarList) {
+                $karigarList->adminreject = 1;
+                $karigarList->save();
+            }
+            $form->reason = $request->reason;
+            $form->save();
+            return back()->with('success', 'Rejected successfully.');
+        }
         if ($request->isMethod('POST')) {
             $validator = Validator::make($request->all(), [
                 'selected_karigar' => 'required|string|exists:karigars,id',
@@ -116,7 +151,9 @@ class AdminController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->with('error', $validator->errors()->first());
             }
-
+            $form = SubmitedForms::find($request->form_id);
+            $form->karigar = 1;
+            $form->save();
             $req_list = new KarigarRequestList;
             $req_list->karigar_id = $request->selected_karigar;
             $req_list->form_id = $request->form_id;
@@ -125,7 +162,7 @@ class AdminController extends Controller
         }
 
         if (!$status) {
-            $dataQuery = SubmitedForms::with('category', 'user')->whereStatus('0');
+            $dataQuery = SubmitedForms::with('category', 'user')->where('karigar', 0)->whereStatus('0');
             if ($request->has('true')) {
                 $perPage = $request->input('pageLimit', 10);
                 $searchFilter = $request->input('searchFilter');
@@ -145,12 +182,10 @@ class AdminController extends Controller
     }
 
 
-
     public function rejectByKarigarIndex(Request $request, $status = null, $id = null)
     {
 
-        $dataQuery = KarigarRequestList::whereStatus(2)->with('karigar', 'form.category');
-
+        $dataQuery = KarigarRequestList::whereStatus(2)->whereAdminreject(0)->with('karigar', 'form.category');
         if ($request->has('true')) {
             $perPage = $request->input('pageLimit', 10);
             $searchFilter = $request->input('searchFilter');
@@ -162,8 +197,6 @@ class AdminController extends Controller
             $data = $dataQuery->paginate($perPage);
             return response()->json($data);
         }
-
-
 
         $page_data['page_title'] = 'Reject By Karigars';
         return view('admin.rejectKarigarList', compact('page_data'));
@@ -171,7 +204,7 @@ class AdminController extends Controller
     public function assignedKarigarIndex(Request $request, $status = null, $id = null)
     {
 
-        $dataQuery = KarigarRequestList::whereStatus(0)->with('karigar', 'form.category');
+        $dataQuery = KarigarRequestList::whereStatus(0)->where('adminreject', 0)->with('karigar', 'form.category');
 
         if ($request->has('true')) {
             $perPage = $request->input('pageLimit', 10);
@@ -184,9 +217,6 @@ class AdminController extends Controller
             $data = $dataQuery->paginate($perPage);
             return response()->json($data);
         }
-
-
-
         $page_data['page_title'] = 'Assinged Karigars';
         return view('admin.rejectKarigarList', compact('page_data'));
     }

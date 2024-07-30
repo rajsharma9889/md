@@ -140,25 +140,65 @@ class KarigarApiController extends Controller
                 // Changing form status
                 $form->status = '1';
                 $form->save();
+                $message = 'Accepted';
             }
             if ($request->status == 2) {
                 $req_list->status = 2;
                 $req_list->reason = $request->reason;
                 $req_list->save();
+                $message = 'Rejected';
             }
             if ($request->status == 3) {
                 $req_list->status = 3;
                 $req_list->save();
                 $form->status = '2';
                 $form->save();
+                $message = 'Completed';
             }
 
             return response()->json([
-                'data' => [$form, $req_list]
+                'status' => true,
+                'message' => $message
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => throw $th
+                'error' => $th->getMessage() . '*line no.' . $th->getLine()
+            ]);
+        }
+    }
+
+    public function getKarigarWork(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'type' => 'required|integer|in:0,1,2',
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'error' => $validator->errors()->first()
+                ]);
+            }
+
+            $data = match ((int) $request->type) {
+                0 => KarigarRequestList::whereStatus(0)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
+
+                1 => KarigarRequestList::whereStatus(1)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
+
+                2 => KarigarRequestList::whereStatus(3)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
+
+                default => 'Type Not Found',
+            };
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Success',
+                'data' => $data
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage() . '*line no.' . $th->getLine()
             ]);
         }
     }

@@ -3,7 +3,7 @@ use App\Models\Karigar;
 $karigars = Karigar::all();
 @endphp
 
-<div class="">
+<div>
     <form action="{{ route('admin.user_new_requests') }}" method="POST">
         @csrf
         <div class="p-2">

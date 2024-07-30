@@ -63,7 +63,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.user_new_requests') }}/accept">
+                <a href="{{ route('admin.user_new_requests') }}/rejected">
                     <i class='bx bx-stats'></i>
                     Reject
                 </a>

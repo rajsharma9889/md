@@ -59,6 +59,7 @@ Route::middleware(['auth:sanctum', 'abilities:karigar'])->group(function () {
     Route::post('/karigar/logout', [karigarApiController::class, 'logout']);
     Route::post('/karigar/checkCat', [karigarApiController::class, 'checkCat']);
     Route::post('/karigar/change_status', [karigarApiController::class, 'changeStatus']);
+    Route::post('/karigar/get_karigar_work', [karigarApiController::class, 'getKarigarWork']);
 });
 
 // Normal Karigar Route

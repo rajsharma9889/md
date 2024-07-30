@@ -33,6 +33,7 @@
                         <td>@{{ item.karigar.name }}</td>
                         <td>@{{ item.karigar.mobile_number }}</td>
                         <td>@{{ item.form.category.category }}</td>
+                        {{-- <td>@{{ item.status }}</td> --}}
 
                         <td>
                             <div class="dropdown dropstart d-flex order-actions">
@@ -41,12 +42,21 @@
                                 </a>
                                 <ul class="dropdown-menu">
 
-                                    <li class="py-1">
+                                    <li ng-if='item.status==2' class="py-1">
                                         <a href="javascript:;" class="dropdown-item px-3"
                                             style="all: unset; cursor: pointer;"
                                             ng-click="ajaxModal('{{ url('ajaxModal/modal_files.showreason') }}', sendObj({'_token' : '{{ csrf_token() }}', 'id' : item.id}))">View</a>
                                     </li>
-
+                                    <li ng-if='item.status==2' class="py-1">
+                                        <a href="javascript:;" class="dropdown-item px-3"
+                                            style="all: unset; cursor: pointer;"
+                                            ng-click="ajaxModal('{{ url('ajaxModal/modal_files.assign_karigar') }}', sendObj({'_token' : '{{ csrf_token() }}', 'id' : item.id}))">Reassign</a>
+                                    </li>
+                                    <li ng-if='item.status == 2' class="py-1">
+                                        <a href="javascript:;" class="dropdown-item px-3"
+                                            style="all: unset; cursor: pointer;"
+                                            ng-click="ajaxModal('{{ url('ajaxModal/modal_files.admin_reject_form') }}', sendObj({'_token' : '{{ csrf_token() }}', 'id' : item.id}))">Reject</a>
+                                    </li>
                                 </ul>
                             </div>
                         </td>

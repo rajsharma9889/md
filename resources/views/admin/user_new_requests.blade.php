@@ -38,6 +38,7 @@
                             <span ng-if="item.status == 1" class="badge rounded-pill bg-warning">Working...</span>
                             <span ng-if="item.status == 2" class="badge rounded-pill bg-primary">Item Ready</span>
                             <span ng-if="item.status == 3" class="badge rounded-pill bg-success">Completed</span>
+                            <span ng-if="item.status == 4" class="badge rounded-pill bg-danger">Rejected</span>
                         </td>
                         <td>
                             <div class="dropdown dropstart d-flex order-actions">
@@ -46,20 +47,26 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li class="py-1">
+                                    <li ng-if='item.status==0' class="py-1">
                                         <a href="javascript:;" class="dropdown-item px-3"
                                             style="all: unset; cursor: pointer;"
                                             ng-click="ajaxModal('{{ url('ajaxModal/modal_files.assign_karigar') }}', sendObj({'_token' : '{{ csrf_token() }}', 'id' : item.id}))">Assign
                                             to karigar</a>
                                     </li>
-                                    {{-- <li class="py-1">
-                                        <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
-                                            href="{{ route('admin.user_new_requests') }}/change_status_reject/@{{ item.id }}">Reject</a>
-                                    </li> --}}
-                                    <li class="py-1">
+                                    <li ng-if="item.status == 4" class="py-1">
+                                        <a href="javascript:;" class="dropdown-item px-3"
+                                            style="all: unset; cursor: pointer;"
+                                            ng-click="ajaxModal('{{ url('ajaxModal/modal_files.admin_reject_message') }}', sendObj({'_token' : '{{ csrf_token() }}', 'reason' : item.reason}))">View</a>
+                                    </li>
+                                    <li ng-if="item.status != 3" class="py-1">
                                         <a class="dropdown-item px-3" style="all: unset; cursor: pointer;"
                                             href="{{ route('admin.user_new_requests') }}/complete/@{{ item.id }}">Mark
                                             Complete</a>
+                                    </li>
+                                    <li ng-if="item.karigar == 0" class="py-1">
+                                        <a href="javascript:;" class="dropdown-item px-3"
+                                            style="all: unset; cursor: pointer;"
+                                            ng-click="ajaxModal('{{ url('ajaxModal/modal_files.admin_reject_form') }}', sendObj({'_token' : '{{ csrf_token() }}', 'id' : item.id}))">Reject</a>
                                     </li>
                                 </ul>
 

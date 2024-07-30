@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->text('reason')->nullable();
             $table->string('status')->default(0);
+            $table->boolean('adminreject')->default(0);
             $table->unsignedBigInteger('form_id');
-            $table->unsignedBigInteger('karigar_id');
+            $table->unsignedBigInteger('karigar_id')->nullable();
             $table->foreign('karigar_id')->on('karigars')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('form_id')->on('submited_forms')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
