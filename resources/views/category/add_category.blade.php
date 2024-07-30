@@ -8,7 +8,7 @@
 <hr />
 <div class="card">
     <div class="card-body p-2">
-        <h5 class="mb-4">Add Category </h5>
+        <h5 class="mb-4">Add Categorys </h5>
         <form class="row g-3" method="POST" action="{{ route('admin.category') }}" enctype="multipart/form-data">
             @csrf
             <div class="col-md-6">
