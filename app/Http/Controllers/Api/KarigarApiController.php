@@ -186,7 +186,8 @@ class KarigarApiController extends Controller
 
                 1 => KarigarRequestList::whereStatus(1)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
 
-                2 => KarigarRequestList::whereStatus(3)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
+                2 => KarigarRequestList::whereStatus(2)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
+                3 => KarigarRequestList::whereStatus(3)->whereKarigar_id(Auth::user()->id)->where('adminreject', 0)->with('form.category')->get(),
 
                 default => 'Type Not Found',
             };
